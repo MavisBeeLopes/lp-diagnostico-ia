@@ -1,0 +1,13 @@
+# Não faz parte do site publicado
+export/
+.claude/
+
+# Segredos — NUNCA versionar (a RD_API_KEY vai nas env vars do Vercel)
+.env
+.env.*
+.vercel
+
+# Sistema / temporários
+Thumbs.db
+.DS_Store
+*.log
