@@ -22,6 +22,41 @@ Depois abra `http://localhost:8011/`.
 > Localmente o formulário valida os campos normalmente, mas o envio final falha e
 > exibe a mensagem de erro. Para testar o envio ponta a ponta, use `vercel dev`.
 
+## Domínio: lughy.com.br/diagnostico-ia
+
+A LP fica hospedada na Vercel, mas o endereço público escolhido é um **caminho dentro
+do site principal**. Isso não é configuração de DNS — exige um proxy reverso no
+servidor de `lughy.com.br`, que roda **WordPress 7.1 + Elementor sobre Apache**.
+
+Quem administra o site precisa adicionar isto ao `.htaccess`, **acima** do bloco
+`# BEGIN WordPress` (senão as regras do WP capturam a URL primeiro):
+
+```apache
+<IfModule mod_proxy_http.c>
+  SSLProxyEngine On
+  ProxyPreserveHost Off
+  ProxyPass        /diagnostico-ia/ https://lp-diagnostico-ia.vercel.app/
+  ProxyPassReverse /diagnostico-ia/ https://lp-diagnostico-ia.vercel.app/
+  # sem a barra final o subdiretorio nao resolve
+  RedirectMatch 301 ^/diagnostico-ia$ /diagnostico-ia/
+</IfModule>
+```
+
+Requisitos e armadilhas:
+
+- **`mod_proxy` e `mod_proxy_http` habilitados.** Em hospedagem compartilhada costumam
+  vir desligados, e só o provedor habilita. É aqui que esse caminho normalmente para.
+- O proxy tem de cobrir **toda a subárvore**, não só o HTML: `assets/`, `styles.css`,
+  `script.js` e principalmente `api/rd-conversao` (a função serverless). Se só a página
+  for proxiada, o formulário não envia.
+- O `script.js` já deriva os caminhos do diretório do documento, então funciona tanto
+  na raiz quanto sob o prefixo — não mexa nisso ao ajustar o proxy.
+
+**Alternativa se o provedor não liberar `mod_proxy`:** usar um subdomínio
+(`diagnostico-ia.lughy.com.br`). Resolve com um único registro CNAME apontando para a
+Vercel, não toca no WordPress, e entrega quase o mesmo ganho de marca. Nesse caso,
+atualize `og:url` e `rel=canonical` no `index.html`.
+
 ## Deploy na Vercel
 
 1. Importar a pasta como projeto (framework preset: **Other** / sem build).
