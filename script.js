@@ -52,8 +52,19 @@
   var submitBtn = form.querySelector('button[type="submit"]');
   var submitLabel = submitBtn ? submitBtn.textContent : "";
   var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var ENDPOINT = "/api/rd-conversao";
-  var THANKYOU_URL = "/obrigado.html?convertido=1";
+  /* Base do documento. A LP pode ser servida na raiz de um domínio
+     (lp-diagnostico-ia.vercel.app/) ou sob um prefixo, via rewrite dentro de
+     lughy.com.br (/diagnostico-ia/). Caminhos absolutos de raiz quebrariam no
+     segundo caso — o POST cairia em lughy.com.br/api/... e não na função. */
+  var BASE = (function () {
+    var p = window.location.pathname || "/";
+    // terminou em nome de arquivo (index.html) → sobe para o diretório
+    if (/\.[a-z0-9]+$/i.test(p)) return p.replace(/[^/]*$/, "");
+    // terminou em diretório, com ou sem barra
+    return p.charAt(p.length - 1) === "/" ? p : p + "/";
+  })();
+  var ENDPOINT = BASE + "api/rd-conversao";
+  var THANKYOU_URL = BASE + "obrigado.html?convertido=1";
 
   function showError(name, show) {
     var el = form.querySelector('[data-error-for="' + name + '"]');
