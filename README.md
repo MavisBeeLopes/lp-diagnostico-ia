@@ -119,13 +119,28 @@ laranja do destaque 5,0:1.
 
 ## Pendências antes de publicar
 
-- [x] `assets/og-image.jpg` (1200x630) — gerada via Chrome headless a partir de `scratchpad/og.html`.
+- [x] `assets/og-image.jpg` (1200x630) — pronta. Para regerar, ver "Regerar a og-image" abaixo.
 - [ ] Confirmar o `conversion_identifier` e as tags da campanha no RD Station.
 - [ ] Trocar `cf_ferramenta_ia` pelo `api_identifier` real do campo customizado no RD Station
       (ver `api/rd-conversao.js`).
 - [ ] Confirmar se o depoimento em vídeo da Wepsy pode ser reaproveitado nesta página
       (bloco previsto na copy, comentado no HTML).
 - [ ] Confirmar o link real da Política de Privacidade no rodapé.
+
+## Regerar a og-image
+
+`og-image-source.html` é a arte de compartilhamento social em HTML, com caminhos
+relativos — renderiza direto da raiz do projeto. Não há Node nesta máquina, então o
+render é via Chrome headless:
+
+```bash
+"/c/Program Files/Google/Chrome/Application/chrome.exe" --headless --disable-gpu --hide-scrollbars --virtual-time-budget=8000 --window-size=1200,630 --screenshot=og.png og-image-source.html
+```
+
+Depois converta `og.png` para `assets/og-image.jpg` (JPEG q86, 1200x630). O Chrome
+escreve o PNG de forma assíncrona — se checar o arquivo imediatamente ele pode ainda
+não existir. E o `<meta og:image>` aponta para `.jpg`: se mudar a extensão, atualize
+as meta tags de Open Graph e Twitter no `index.html`.
 
 ## Regras de marca aplicadas
 
