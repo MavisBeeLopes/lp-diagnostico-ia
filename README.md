@@ -22,40 +22,39 @@ Depois abra `http://localhost:8011/`.
 > Localmente o formulário valida os campos normalmente, mas o envio final falha e
 > exibe a mensagem de erro. Para testar o envio ponta a ponta, use `vercel dev`.
 
-## Domínio: lughy.com.br/diagnostico-ia
+## Domínio: diagnostico-ia.lughy.com.br
 
-A LP fica hospedada na Vercel, mas o endereço público escolhido é um **caminho dentro
-do site principal**. Isso não é configuração de DNS — exige um proxy reverso no
-servidor de `lughy.com.br`, que roda **WordPress 7.1 + Elementor sobre Apache**.
+Subdomínio apontado para a Vercel. Não toca no WordPress do site principal, não
+depende de `mod_proxy` e mantém o deploy automático a cada push.
 
-Quem administra o site precisa adicionar isto ao `.htaccess`, **acima** do bloco
-`# BEGIN WordPress` (senão as regras do WP capturam a URL primeiro):
+**Onde entra o registro:** o DNS de `lughy.com.br` é administrado no **Oracle Cloud
+DNS** (`ns1..ns4.p201.dns.oraclecloud.net`) — não no painel da hospedagem. O `A` do
+domínio raiz aponta para `162.214.91.39`, que é o servidor do WordPress, e não muda.
 
-```apache
-<IfModule mod_proxy_http.c>
-  SSLProxyEngine On
-  ProxyPreserveHost Off
-  ProxyPass        /diagnostico-ia/ https://lp-diagnostico-ia.vercel.app/
-  ProxyPassReverse /diagnostico-ia/ https://lp-diagnostico-ia.vercel.app/
-  # sem a barra final o subdiretorio nao resolve
-  RedirectMatch 301 ^/diagnostico-ia$ /diagnostico-ia/
-</IfModule>
-```
+Passos:
 
-Requisitos e armadilhas:
+1. Na Vercel, em Project Settings → Domains, adicionar `diagnostico-ia.lughy.com.br`.
+2. A Vercel exibe o alvo do CNAME. Usar **exatamente o valor mostrado no painel**
+   (costuma ser `cname.vercel-dns.com`, mas varia por região/conta).
+3. No Oracle Cloud DNS, na zona `lughy.com.br`, criar:
+   `diagnostico-ia` · tipo **CNAME** · alvo = o valor do passo 2.
+4. Esperar a propagação. A Vercel emite o certificado TLS sozinha depois que o
+   registro resolve.
 
-- **`mod_proxy` e `mod_proxy_http` habilitados.** Em hospedagem compartilhada costumam
-  vir desligados, e só o provedor habilita. É aqui que esse caminho normalmente para.
-- O proxy tem de cobrir **toda a subárvore**, não só o HTML: `assets/`, `styles.css`,
-  `script.js` e principalmente `api/rd-conversao` (a função serverless). Se só a página
-  for proxiada, o formulário não envia.
-- O `script.js` já deriva os caminhos do diretório do documento, então funciona tanto
-  na raiz quanto sob o prefixo — não mexa nisso ao ajustar o proxy.
+`og:url` e `rel=canonical` no `index.html` já apontam para este endereço. **Se o
+domínio mudar, os dois têm de mudar juntos** — senão o preview compartilhado
+canonicaliza para uma URL que não serve a LP.
 
-**Alternativa se o provedor não liberar `mod_proxy`:** usar um subdomínio
-(`diagnostico-ia.lughy.com.br`). Resolve com um único registro CNAME apontando para a
-Vercel, não toca no WordPress, e entrega quase o mesmo ganho de marca. Nesse caso,
-atualize `og:url` e `rel=canonical` no `index.html`.
+### Histórico das opções descartadas
+
+- **`lughy.com.br/diagnostico-ia` via proxy reverso** — exigiria `mod_proxy` no Apache,
+  liberado só pelo provedor, e o proxy teria de cobrir toda a subárvore (incluindo
+  `api/rd-conversao`). Descartado pela dependência externa.
+- **Subir os arquivos numa pasta do WordPress** — funcionaria sem `mod_proxy` (o
+  `.htaccess` do WP passa direto por arquivos e diretórios que existem), mas criaria
+  uma segunda cópia da LP e exigiria CORS na função. Descartado.
+- **`lp-diagnostico-ia.vercel.app`** — indisponível: o subdomínio pertence a outra
+  conta. A URL automática do projeto ficou `lp-diagnostico-ia-lughy.vercel.app`.
 
 ## Deploy na Vercel
 

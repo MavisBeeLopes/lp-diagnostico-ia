@@ -52,10 +52,11 @@
   var submitBtn = form.querySelector('button[type="submit"]');
   var submitLabel = submitBtn ? submitBtn.textContent : "";
   var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  /* Base do documento. A LP pode ser servida na raiz de um domínio
-     (lp-diagnostico-ia.vercel.app/) ou sob um prefixo, via rewrite dentro de
-     lughy.com.br (/diagnostico-ia/). Caminhos absolutos de raiz quebrariam no
-     segundo caso — o POST cairia em lughy.com.br/api/... e não na função. */
+  /* Base do documento. Hoje a LP roda na raiz de um domínio
+     (diagnostico-ia.lughy.com.br/), então isto resolve para "/" — igual a um
+     caminho absoluto. Fica derivado do diretório de propósito: se algum dia ela
+     for servida sob um prefixo (/diagnostico-ia/), o POST continua caindo na
+     função certa em vez de na raiz do domínio. */
   var BASE = (function () {
     var p = window.location.pathname || "/";
     // terminou em nome de arquivo (index.html) → sobe para o diretório
