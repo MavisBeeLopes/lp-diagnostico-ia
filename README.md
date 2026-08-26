@@ -119,7 +119,7 @@ laranja do destaque 5,0:1.
 
 ## Pendências antes de publicar
 
-- [ ] `assets/og-image.jpg` (1200x630) — a meta tag já aponta para o arquivo, que ainda não existe.
+- [x] `assets/og-image.jpg` (1200x630) — gerada via Chrome headless a partir de `scratchpad/og.html`.
 - [ ] Confirmar o `conversion_identifier` e as tags da campanha no RD Station.
 - [ ] Trocar `cf_ferramenta_ia` pelo `api_identifier` real do campo customizado no RD Station
       (ver `api/rd-conversao.js`).

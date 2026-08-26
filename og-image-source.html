@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: "Lexend", system-ui, "Segoe UI", sans-serif;
+    color: #0A0A0A;
+    background: #fff;
+    position: relative;
+  }
+  .art {
+    position: absolute; inset: 0 0 0 22%;
+  }
+  .art img { width: 100%; height: 100%; object-fit: cover; object-position: right center; }
+  .veil {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      #fff 0%, rgba(255,255,255,.98) 42%, rgba(255,255,255,.55) 54%,
+      rgba(255,255,255,.10) 64%, rgba(255,255,255,0) 72%);
+  }
+  .content {
+    position: absolute; inset: 0;
+    padding: 68px 72px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .top { display: flex; align-items: center; gap: 18px; }
+  .top img { height: 40px; }
+  .tag {
+    font-size: 15px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: #C2410C; padding-left: 18px; border-left: 2px solid #d5d5d5;
+  }
+  h1 {
+    font-size: 68px; font-weight: 800; line-height: 1.05;
+    max-width: 13ch; letter-spacing: -0.02em;
+  }
+  h1 .hl { color: #FF5A1F; }
+  .sub {
+    margin-top: 22px; font-size: 25px; font-weight: 400; line-height: 1.35;
+    color: #45474d; max-width: 26ch;
+  }
+  .bottom { display: flex; align-items: center; gap: 14px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #FF5A1F; color: #fff;
+    font-size: 21px; font-weight: 700;
+    padding: 15px 30px; border-radius: 999px;
+  }
+  .note { font-size: 17px; color: #5c5f66; }
+</style>
+</head>
+<body>
+  <div class="art"><img src="ART_PATH" alt="" /></div>
+  <div class="veil"></div>
+  <div class="content">
+    <div class="top">
+      <img src="LOGO_PATH" alt="Lughy" />
+      <span class="tag">Diagnóstico de código com IA</span>
+    </div>
+    <div>
+      <h1>Sua plataforma gerada por IA <span class="hl">é segura?</span></h1>
+      <p class="sub">Riscos de segurança, dívida técnica e prontidão para escalar.</p>
+    </div>
+    <div class="bottom">
+      <span class="pill">Solicitar diagnóstico</span>
+      <span class="note">Sem compromisso de contratação.</span>
+    </div>
+  </div>
+</body>
+</html>
