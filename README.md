@@ -22,39 +22,37 @@ Depois abra `http://localhost:8011/`.
 > Localmente o formulário valida os campos normalmente, mas o envio final falha e
 > exibe a mensagem de erro. Para testar o envio ponta a ponta, use `vercel dev`.
 
-## Domínio: diagnostico-ia.lughy.com.br
+## Domínio: lp-diagnostico-ia-lughy.vercel.app
 
-Subdomínio apontado para a Vercel. Não toca no WordPress do site principal, não
-depende de `mod_proxy` e mantém o deploy automático a cada push.
+Fica na URL automática da Vercel, mesmo padrão das LPs irmãs (`lp-consultoria-suk`,
+`lp-diagnostico-contabilidade`). Sem custo, sem DNS, deploy automático a cada push.
 
-**Onde entra o registro:** o DNS de `lughy.com.br` é administrado no **Oracle Cloud
-DNS** (`ns1..ns4.p201.dns.oraclecloud.net`) — não no painel da hospedagem. O `A` do
-domínio raiz aponta para `162.214.91.39`, que é o servidor do WordPress, e não muda.
+A Vercel acrescentou o sufixo `-lughy` porque `lp-diagnostico-ia.vercel.app` já
+pertence a outra conta — subdomínios `.vercel.app` são únicos globalmente.
 
-Passos:
+`og:url` e `rel=canonical` no `index.html` apontam para este endereço. **Se o domínio
+mudar, os dois têm de mudar juntos** — senão o preview compartilhado canonicaliza para
+uma URL que não serve a LP.
 
-1. Na Vercel, em Project Settings → Domains, adicionar `diagnostico-ia.lughy.com.br`.
-2. A Vercel exibe o alvo do CNAME. Usar **exatamente o valor mostrado no painel**
-   (costuma ser `cname.vercel-dns.com`, mas varia por região/conta).
-3. No Oracle Cloud DNS, na zona `lughy.com.br`, criar:
-   `diagnostico-ia` · tipo **CNAME** · alvo = o valor do passo 2.
-4. Esperar a propagação. A Vercel emite o certificado TLS sozinha depois que o
-   registro resolve.
+### Se um dia quiserem domínio próprio
 
-`og:url` e `rel=canonical` no `index.html` já apontam para este endereço. **Se o
-domínio mudar, os dois têm de mudar juntos** — senão o preview compartilhado
-canonicaliza para uma URL que não serve a LP.
+O DNS de `lughy.com.br` é administrado no **Oracle Cloud DNS**
+(`ns1..ns4.p201.dns.oraclecloud.net`), não no painel da hospedagem. O `A` do domínio
+raiz aponta para `162.214.91.39`, o servidor do WordPress, e não mudaria.
 
-### Histórico das opções descartadas
+O caminho mais simples seria um subdomínio: adicionar `diagnostico-ia.lughy.com.br`
+em Project Settings → Domains, e criar no Oracle Cloud DNS um **CNAME** com nome
+`diagnostico-ia` apontando para o alvo que a Vercel exibir. O Oracle salva alterações
+de DNS como rascunho — é preciso clicar em **Publish changes**, senão o registro não
+vale. Depois disso, atualizar `og:url` e `canonical`.
 
-- **`lughy.com.br/diagnostico-ia` via proxy reverso** — exigiria `mod_proxy` no Apache,
-  liberado só pelo provedor, e o proxy teria de cobrir toda a subárvore (incluindo
-  `api/rd-conversao`). Descartado pela dependência externa.
+Opções avaliadas e descartadas para `lughy.com.br/diagnostico-ia`:
+
+- **Proxy reverso** — exigiria `mod_proxy` no Apache, liberado só pelo provedor, e o
+  proxy teria de cobrir toda a subárvore (incluindo `api/rd-conversao`).
 - **Subir os arquivos numa pasta do WordPress** — funcionaria sem `mod_proxy` (o
   `.htaccess` do WP passa direto por arquivos e diretórios que existem), mas criaria
-  uma segunda cópia da LP e exigiria CORS na função. Descartado.
-- **`lp-diagnostico-ia.vercel.app`** — indisponível: o subdomínio pertence a outra
-  conta. A URL automática do projeto ficou `lp-diagnostico-ia-lughy.vercel.app`.
+  uma segunda cópia da LP e exigiria CORS na função.
 
 ## Deploy na Vercel
 
