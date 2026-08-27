@@ -135,14 +135,15 @@ duas no tablet, uma no mobile; o quadrado nunca vira retângulo.
 | # | título | mockup |
 |---|---|---|
 | 01 | Gerado por IA, nunca revisado | prompt → linhas de código → caixa de revisão vazia e tracejada |
-| 02 | Segurança e dados de terceiros | cadeado aberto sobre credencial mascarada; dados saindo para 3 serviços, um sinalizado |
+| 02 | Segurança do código e dos dados | escudo com o código em cima e os cadastros de usuários embaixo; o perímetro não fecha e um cadastro aparece exposto |
 | 03 | Bugs difíceis de rastrear | erro no topo e o rastro que some linha a linha até um "?" |
 | 04 | Demo que não vira escala | medidor com ponteiro na faixa laranja + requisições estourando |
 
 ⚠️ **Divergência em relação à copy aprovada.** O `Copy_LP_Diagnostico_IA_Lughy.md` traz
 quatro bullets, e o terceiro ("Está perto de escalar, captar investimento…") **foi
-removido** a pedido. Em seu lugar entrou o bullet de segurança e dados de terceiros,
-que **não consta da copy aprovada**. Os quatro **títulos** também são novos — a copy
+removido** a pedido. Em seu lugar entrou o bullet de segurança — do código e dos dados de
+clientes e terceiros que fazem login e se cadastram na plataforma —, que **não consta
+da copy aprovada**. Os quatro **títulos** também são novos — a copy
 original não previa título por sinal. Tudo isso precisa passar por aprovação antes de
 a campanha rodar. Os textos respeitam as regras de marca (sem prazo, sem preço, sem
 DGS, IA nunca revisando sozinha).

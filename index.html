@@ -120,45 +120,46 @@
             <p>Você usou uma ferramenta de IA (Lovable, Cursor, Replit, bolt.new) para construir seu MVP e nunca teve uma revisão técnica especializada do que foi gerado.</p>
           </li>
 
-          <!-- 02 · Segurança do código e dados de terceiros -->
+          <!-- 02 · Segurança do código e dos dados de quem usa a plataforma -->
           <li class="sinal">
             <div class="sinal__mock">
-              <svg viewBox="0 0 200 200" role="img" aria-label="Ilustração: uma chave exposta no código e dados saindo para serviços de terceiros">
-                <!-- cadeado aberto sobre uma credencial mascarada -->
-                <path d="M46 52v-9a12 12 0 0 1 24 0" fill="none" stroke="#FF5A1F" stroke-width="3" stroke-linecap="round" />
-                <rect x="34" y="52" width="26" height="21" rx="5" fill="rgba(255,90,31,.18)" stroke="#FF5A1F" stroke-width="2" />
-                <circle cx="47" cy="62" r="2.6" fill="#FF8A4C" />
-                <rect x="72" y="56" width="94" height="13" rx="6" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.14)" />
-                <circle cx="84" cy="62.5" r="2.2" fill="rgba(255,255,255,.45)" />
-                <circle cx="93" cy="62.5" r="2.2" fill="rgba(255,255,255,.45)" />
-                <circle cx="102" cy="62.5" r="2.2" fill="rgba(255,255,255,.45)" />
-                <circle cx="111" cy="62.5" r="2.2" fill="rgba(255,255,255,.45)" />
-                <circle cx="120" cy="62.5" r="2.2" fill="rgba(255,255,255,.45)" />
-                <circle cx="129" cy="62.5" r="2.2" fill="rgba(255,255,255,.45)" />
+              <svg viewBox="0 0 200 200" role="img" aria-label="Ilustração: um escudo com o código em cima e os cadastros de usuários embaixo, com a proteção interrompida">
+                <!-- escudo: o perímetro de proteção -->
+                <path d="M100 26 L162 50 V104 C162 140 133 164 100 176 C67 164 38 140 38 104 V50 Z"
+                      fill="rgba(255,255,255,.045)" stroke="rgba(255,255,255,.18)" stroke-width="1.6" />
+                <!-- trecho do perímetro que não fecha -->
+                <path d="M162 62 V104 C162 128 150 146 132 158"
+                      fill="none" stroke="#FF5A1F" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="5 5" />
 
-                <!-- o seu sistema -->
-                <rect x="72" y="92" width="56" height="30" rx="9" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)" />
-                <rect x="84" y="103" width="32" height="4" rx="2" fill="rgba(255,255,255,.35)" />
-                <rect x="84" y="111" width="20" height="3.5" rx="1.75" fill="rgba(255,255,255,.18)" />
+                <!-- em cima: o código -->
+                <path d="M60 61l-5 5 5 5" fill="none" stroke="#FF8A4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M67 61l5 5-5 5" fill="none" stroke="#FF8A4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <rect x="80" y="63.5" width="52" height="4.5" rx="2.25" fill="rgba(255,255,255,.28)" />
+                <rect x="80" y="76" width="34" height="4" rx="2" fill="rgba(255,255,255,.15)" />
 
-                <!-- dados saindo para tres servicos de terceiros -->
-                <path d="M84 122l-24 20" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.6" stroke-dasharray="4 3" />
-                <path d="M100 122v20" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.6" stroke-dasharray="4 3" />
-                <path d="M116 122l24 20" fill="none" stroke="#FF5A1F" stroke-width="1.8" stroke-dasharray="4 3" />
+                <line x1="56" y1="91" x2="144" y2="91" stroke="rgba(255,255,255,.12)" stroke-width="1" />
 
-                <rect x="40" y="146" width="34" height="30" rx="8" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.16)" />
-                <rect x="49" y="158" width="16" height="4" rx="2" fill="rgba(255,255,255,.24)" />
-                <rect x="83" y="146" width="34" height="30" rx="8" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.16)" />
-                <rect x="92" y="158" width="16" height="4" rx="2" fill="rgba(255,255,255,.24)" />
-                <!-- o terceiro servico esta sinalizado -->
-                <rect x="126" y="146" width="34" height="30" rx="8" fill="rgba(255,90,31,.16)" stroke="#FF5A1F" stroke-width="1.8" />
-                <rect x="141.7" y="153" width="3.6" height="12" rx="1.8" fill="#FF8A4C" />
-                <circle cx="143.5" cy="169" r="2.2" fill="#FF8A4C" />
+                <!-- embaixo: quem faz login e cadastra os próprios dados -->
+                <circle cx="64" cy="105" r="5.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" />
+                <path d="M57 116c1.5-4 4-6 7-6s5.5 2 7 6" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" stroke-linecap="round" />
+                <rect x="80" y="101" width="50" height="4.5" rx="2.25" fill="rgba(255,255,255,.24)" />
+                <rect x="80" y="110" width="30" height="3.5" rx="1.75" fill="rgba(255,255,255,.12)" />
+
+                <circle cx="64" cy="133" r="5.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" />
+                <path d="M57 144c1.5-4 4-6 7-6s5.5 2 7 6" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" stroke-linecap="round" />
+                <rect x="80" y="129" width="42" height="4.5" rx="2.25" fill="rgba(255,255,255,.24)" />
+                <rect x="80" y="138" width="26" height="3.5" rx="1.75" fill="rgba(255,255,255,.12)" />
+
+                <!-- o cadastro exposto -->
+                <circle cx="64" cy="158" r="5.5" fill="none" stroke="#FF8A4C" stroke-width="1.8" />
+                <path d="M57 169c1.5-4 4-6 7-6s5.5 2 7 6" fill="none" stroke="#FF8A4C" stroke-width="1.8" stroke-linecap="round" />
+                <rect x="80" y="154" width="34" height="4.5" rx="2.25" fill="#FF8A4C" />
+                <rect x="80" y="163" width="20" height="3.5" rx="1.75" fill="rgba(255,138,76,.55)" />
               </svg>
             </div>
             <span class="sinal__num" aria-hidden="true">02</span>
-            <h3 class="sinal__title">Segurança e dados de terceiros</h3>
-            <p>Seu projeto depende de bibliotecas, APIs e integrações que a IA escolheu por você — e não há clareza sobre quais têm acesso aos dados dos seus usuários, nem se credenciais ficaram expostas no código.</p>
+            <h3 class="sinal__title">Segurança do código e dos dados</h3>
+            <p>Você não sabe se o código gerado é seguro — nem se a plataforma protege como deveria os dados de clientes e terceiros que fazem login e cadastram suas informações nela.</p>
           </li>
 
           <!-- 03 · Bugs difíceis de rastrear -->
