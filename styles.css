@@ -408,15 +408,25 @@ main { padding-top: var(--header-h); }
 .sinal__mock svg { display: block; width: 100%; height: 100%; }
 
 /* O número fica FORA do quadrado: dentro dele encobria o conteúdo dos mockups.
-   É ornamento (aria-hidden) — a numeração não carrega informação. */
+   É ornamento (aria-hidden) — a numeração não carrega informação.
+   Fica em branco esmaecido, e não em laranja, para o título ficar com o
+   destaque: dois elementos laranja empilhados competiam entre si. */
 .sinal__num {
   display: block;
-  margin-bottom: var(--space-3);
-  font-size: 0.9rem;
-  font-weight: var(--fw-extrabold);
+  margin-bottom: var(--space-2);
+  font-size: 0.82rem;
+  font-weight: var(--fw-bold);
   line-height: 1;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
+  /* 0.50 = 5,1:1 sobre o fundo da seção; abaixo disso reprova no AA */
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.sinal__title {
+  font-size: 1.2rem;
+  line-height: 1.25;
   color: var(--laranja-lughy-light);
+  margin-bottom: var(--space-3);
 }
 
 .sinal p {

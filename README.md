@@ -132,22 +132,32 @@ Cada sinal tem um mockup **quadrado** (`aspect-ratio: 1/1`), em SVG inline — s
 imagem externa, sem requisição, escala sem perder nitidez. Quatro colunas no desktop,
 duas no tablet, uma no mobile; o quadrado nunca vira retângulo.
 
-| # | mockup | leitura |
+| # | título | mockup |
 |---|---|---|
-| 01 | prompt → linhas de código → caixa de revisão vazia e tracejada | gerado, nunca revisado |
-| 02 | erro no topo e o rastro que some linha a linha até um "?" | bug sem origem rastreável |
-| 03 | barras subindo com seta de tendência sobre uma base rachada | escalar sobre fundação incerta |
-| 04 | medidor com ponteiro na faixa laranja + requisições estourando | passa na demo, não na carga |
+| 01 | Gerado por IA, nunca revisado | prompt → linhas de código → caixa de revisão vazia e tracejada |
+| 02 | Segurança e dados de terceiros | cadeado aberto sobre credencial mascarada; dados saindo para 3 serviços, um sinalizado |
+| 03 | Bugs difíceis de rastrear | erro no topo e o rastro que some linha a linha até um "?" |
+| 04 | Demo que não vira escala | medidor com ponteiro na faixa laranja + requisições estourando |
+
+⚠️ **Divergência em relação à copy aprovada.** O `Copy_LP_Diagnostico_IA_Lughy.md` traz
+quatro bullets, e o terceiro ("Está perto de escalar, captar investimento…") **foi
+removido** a pedido. Em seu lugar entrou o bullet de segurança e dados de terceiros,
+que **não consta da copy aprovada**. Os quatro **títulos** também são novos — a copy
+original não previa título por sinal. Tudo isso precisa passar por aprovação antes de
+a campanha rodar. Os textos respeitam as regras de marca (sem prazo, sem preço, sem
+DGS, IA nunca revisando sozinha).
 
 O SVG do medidor (04) nasce baixo na viewBox — a semicircunferência deixa o vazio em
 cima. Ele leva um `<g transform>` que sobe e amplia o conjunto para as margens baterem
 com as dos outros três (~7% nas laterais). Se editar esse mockup, confira as margens.
 
 O número de cada sinal fica **fora** do quadrado, acima do texto: dentro dele encobria
-o conteúdo dos mockups 01–03. É ornamento (`aria-hidden`).
+o conteúdo dos mockups. É ornamento (`aria-hidden`) e fica em branco esmaecido, não em
+laranja — o laranja é do título, e dois elementos laranja empilhados competiam.
 
-Contrastes em `.sinais`: texto 11,0:1, número laranja 7,5:1, título 15,7:1,
-laranja do destaque 5,0:1.
+Contrastes em `.sinais`: texto 11,0:1, título laranja 7,1:1, número 5,1:1,
+título da seção 15,7:1. O número estava em 42% de branco (3,98:1, reprovava) e subiu
+para 50%.
 
 ## Pendências antes de publicar
 
