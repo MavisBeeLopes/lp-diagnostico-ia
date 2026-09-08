@@ -67,6 +67,35 @@
   var ENDPOINT = BASE + "api/rd-conversao";
   var THANKYOU_URL = BASE + "obrigado.html?convertido=1";
 
+  /* -------- Origem do lead --------
+     A conversão é registrada pelo servidor, então o RD Station não enxerga
+     cookie, referrer nem UTM do visitante: sem os dados abaixo, todo lead
+     entra como "origem desconhecida". Coletamos aqui, no navegador, e
+     mandamos junto no POST. */
+  function lerCookie(nome) {
+    var m = document.cookie.match("(?:^|; )" + nome.replace(/[.$?*|{}()[\]\\/+^]/g, "\\$&") + "=([^;]*)");
+    if (!m) return "";
+    try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; }
+  }
+
+  function coletarOrigem() {
+    var params = new URLSearchParams(window.location.search);
+    // _rdtrk guarda o id do visitante; ora vem cru, ora dentro de um JSON
+    var rdtrk = lerCookie("_rdtrk");
+    var uuid = rdtrk.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+    return {
+      // cookie de origem do código de monitoramento do RD Station
+      trf_src: lerCookie("__trf.src"),
+      client_tracking_id: uuid ? uuid[0] : "",
+      // rede de segurança: se o cookie não existir, usamos a UTM da própria URL
+      utm_source: params.get("utm_source") || "",
+      utm_medium: params.get("utm_medium") || "",
+      utm_campaign: params.get("utm_campaign") || "",
+      utm_content: params.get("utm_content") || "",
+      referrer: document.referrer || ""
+    };
+  }
+
   function showError(name, show) {
     var el = form.querySelector('[data-error-for="' + name + '"]');
     var field = form.elements[name];
@@ -136,7 +165,8 @@
       telefone: form.elements["telefone"].value.trim(),
       projeto: form.elements["projeto"].value.trim(),
       ferramenta: form.elements["ferramenta"].value.trim(),
-      lgpd: form.elements["lgpd"].checked
+      lgpd: form.elements["lgpd"].checked,
+      origem: coletarOrigem()
     };
 
     setLoading(true);

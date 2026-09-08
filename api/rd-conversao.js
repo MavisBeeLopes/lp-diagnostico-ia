@@ -57,6 +57,35 @@ module.exports = async function handler(req, res) {
     payload.tags = tags.concat("ferramenta-" + ferramenta.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
   }
 
+  // Origem do lead. Sem estes campos o RD Station registra "origem desconhecida":
+  // a chamada parte do servidor, então ele não tem cookie, referrer nem UTM.
+  //
+  // A documentação da API é explícita: se traffic_source levar o valor do cookie
+  // __trf.src, os campos traffic_medium/campaign/value têm de ir VAZIOS. Por isso
+  // os dois caminhos são exclusivos, e o cookie tem prioridade — ele carrega a
+  // origem real da sessão, enquanto a UTM só descreve o clique atual.
+  const origem = (body && typeof body.origem === "object" && body.origem) || {};
+  const trfSrc = str(origem.trf_src);
+  const utmSource = str(origem.utm_source);
+
+  if (trfSrc) {
+    payload.traffic_source = trfSrc;
+  } else if (utmSource) {
+    payload.traffic_source = utmSource;
+    const medium = str(origem.utm_medium);      if (medium) payload.traffic_medium = medium;
+    const campaign = str(origem.utm_campaign);  if (campaign) payload.traffic_campaign = campaign;
+    const value = str(origem.utm_content);      if (value) payload.traffic_value = value;
+  } else {
+    // sem cookie e sem UTM: o referrer ainda diferencia orgânico de acesso direto
+    const ref = str(origem.referrer);
+    if (ref) {
+      try { payload.traffic_source = new URL(ref).hostname; } catch (_) { /* referrer inválido, ignora */ }
+    }
+  }
+
+  const trackingId = str(origem.client_tracking_id);
+  if (trackingId) payload.client_tracking_id = trackingId;
+
   // Base legal (LGPD) quando o contato autorizou o contato
   if (body.lgpd) {
     payload.legal_bases = [
