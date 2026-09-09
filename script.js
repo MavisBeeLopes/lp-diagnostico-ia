@@ -235,20 +235,40 @@
     var INTERVALO = 7000;
     var travado = false; // vídeo aberto: não troca de slide sozinho
 
-    /* Trava a altura na do maior item, senão a coluna pula a cada troca.
+    /* Altura que o card precisa ter para caber o maior item sem pular a cada
+       troca. Soma o padding porque o min-height é border-box: medir só o
+       conteúdo deixaria o slide mais alto estourando a altura travada.
+
        A guarda de largura não é decorativa: rodando com o elemento sem
        largura (aba oculta, ancestral display:none), o texto quebra em uma
-       coluna de um caractere e gravaria uma altura absurda no style. */
-    function fixarAltura() {
-      if (!viewport.offsetWidth) return;
+       coluna de um caractere e devolveria uma altura absurda. */
+    function alturaNecessaria() {
+      if (!viewport.offsetWidth) return 0;
+      viewport.style.minHeight = "";
+      var cs = window.getComputedStyle(viewport);
+      var padding = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+
+      var estado = itens.map(function (item) { return item.hidden; });
       var maior = 0;
-      itens.forEach(function (item) {
-        var estavaOculto = item.hidden;
-        item.hidden = false;
-        maior = Math.max(maior, item.offsetHeight);
-        item.hidden = estavaOculto;
+      itens.forEach(function (_, alvo) {
+        /* Exatamente UM item visível por medição. Deixar dois aparecendo
+           muda a altura da página, o que pode fazer a barra de rolagem
+           surgir, encolher a largura e rebobinar o texto.
+
+           Medimos o CARD, não o item: somar o padding à altura do item
+           erra por causa de colapso de margem entre eles. O card já é o
+           que vai renderizar. */
+        itens.forEach(function (item, k) { item.hidden = k !== alvo; });
+        maior = Math.max(maior, viewport.getBoundingClientRect().height);
       });
-      if (maior) viewport.style.minHeight = maior + "px";
+      itens.forEach(function (item, k) { item.hidden = estado[k]; });
+
+      // padding lido só para não devolver altura menor que um card vazio
+      return maior ? Math.ceil(Math.max(maior, padding)) : 0;
+    }
+
+    function aplicarAltura(px) {
+      if (px) viewport.style.minHeight = px + "px";
     }
 
     var pontos = itens.map(function (_, i) {
@@ -296,21 +316,59 @@
     });
 
     mostrar(0);
-    fixarAltura();
-    window.addEventListener("resize", fixarAltura);
     comecar();
 
     return {
       travar: function () { travado = true; parar(); },
-      remedir: fixarAltura
+      alturaNecessaria: alturaNecessaria,
+      aplicarAltura: aplicarAltura,
+      viewport: viewport
     };
   }
 
   var carrosseis = {};
+  var todos = [];
   document.querySelectorAll("[data-carrossel]").forEach(function (raiz) {
     var api = criarCarrossel(raiz);
-    if (api) carrosseis[raiz.getAttribute("data-item")] = api;
+    if (!api) return;
+    api.raiz = raiz;
+    carrosseis[raiz.getAttribute("data-item")] = api;
+    todos.push(api);
   });
+
+  /* Carrossels que dividem a mesma linha precisam da MESMA altura, senão as
+     bases dos cards e as fileiras de controle ficam em alturas diferentes e
+     a seção parece quebrada. Empilhados (mobile), cada um usa a sua, para o
+     mais curto não ganhar um vão vazio embaixo. */
+  function equalizar() {
+    var medidas = todos.map(function (api) { return api.alturaNecessaria(); });
+    if (medidas.some(function (m) { return !m; })) return;
+
+    var grupos = {};
+    todos.forEach(function (api, i) {
+      var linha = Math.round(api.viewport.getBoundingClientRect().top + window.pageYOffset);
+      // tolerância de 4px para diferenças de arredondamento
+      var chave = Object.keys(grupos).find(function (k) { return Math.abs(k - linha) <= 4; });
+      if (chave === undefined) chave = linha;
+      (grupos[chave] = grupos[chave] || []).push(i);
+    });
+
+    Object.keys(grupos).forEach(function (chave) {
+      var idx = grupos[chave];
+      var alvo = Math.max.apply(null, idx.map(function (i) { return medidas[i]; }));
+      idx.forEach(function (i) { todos[i].aplicarAltura(alvo); });
+    });
+  }
+
+  equalizar();
+
+  var reflow;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(reflow);
+    reflow = window.setTimeout(equalizar, 150);
+  });
+  // as capas dos vídeos entram depois e mudam a altura da coluna
+  window.addEventListener("load", equalizar);
 
   /* -------- Cases em vídeo: fachada --------
      Só a capa carrega junto com a página. O player do YouTube entra no DOM
