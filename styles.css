@@ -1152,3 +1152,139 @@ button[type="submit"]:disabled { opacity: 0.7; cursor: progress; }
   .frente--conectar::after     { left: -46px;  top: 24%;    transform: rotate(20deg); }
 }
 
+
+/* =========================================================
+   Depoimentos (carrossel) — respostas do último NPS
+   Um por vez, com navegação por setas, pontos e teclado.
+   ========================================================= */
+.depoimentos .section__title {
+  text-align: center;
+  max-width: none;
+  margin-inline: auto;
+  margin-bottom: var(--space-7);
+}
+
+.depo {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.depo__viewport {
+  position: relative;
+  background: var(--branco);
+  border: 1px solid var(--cinza-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-8) var(--space-5) var(--space-6);
+  overflow: hidden;
+}
+/* barra laranja no topo, mesmo recurso do card de oferta */
+.depo__viewport::before {
+  content: "";
+  position: absolute; inset: 0 0 auto 0; height: 5px;
+  background: linear-gradient(90deg, var(--laranja-lughy-light), var(--laranja-lughy) 55%, var(--laranja-lughy-dark));
+}
+.depo__aspas {
+  position: absolute;
+  top: 6px; left: var(--space-5);
+  font-size: 5rem;
+  line-height: 1;
+  font-weight: var(--fw-extrabold);
+  color: rgba(255, 90, 31, 0.16);
+  pointer-events: none;
+}
+
+.depo__item {
+  margin: 0;
+  animation: depoEntra 0.4s ease both;
+}
+@keyframes depoEntra {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.depo__item blockquote { margin: 0; }
+.depo__item blockquote p {
+  font-size: clamp(1.05rem, 2.1vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--cinza-700);
+  margin-bottom: var(--space-5);
+}
+.depo__item figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--cinza-200);
+}
+.depo__nome { font-weight: var(--fw-bold); color: var(--preto); }
+.depo__cargo { font-size: 0.92rem; color: var(--cinza-600); }
+
+/* Setas */
+.depo__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--cinza-300);
+  background: var(--branco);
+  color: var(--preto);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+.depo__nav:hover {
+  background: var(--laranja-lughy);
+  border-color: var(--laranja-lughy);
+  color: var(--branco);
+  transform: translateY(-2px);
+}
+.depo__nav svg { width: 22px; height: 22px; }
+
+/* Pontos */
+.depo__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.depo__dot {
+  width: 9px; height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cinza-300);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.depo__dot:hover { background: var(--cinza-500); }
+.depo__dot[aria-current="true"] {
+  background: var(--laranja-lughy);
+  transform: scale(1.35);
+}
+
+/* Mobile: card em cima, controles numa linha só embaixo.
+   As três colunas são explícitas de propósito — sem elas os controles
+   caem todos na mesma célula e se sobrepõem. */
+.depo {
+  grid-template-columns: auto 1fr auto;
+}
+.depo__viewport { grid-column: 1 / -1; grid-row: 1; }
+.depo__nav--prev { grid-column: 1; grid-row: 2; justify-self: start; }
+.depo__dots     { grid-column: 2; grid-row: 2; align-self: center; }
+.depo__nav--next { grid-column: 3; grid-row: 2; justify-self: end; }
+
+@media (min-width: 768px) {
+  /* setas nas laterais do card, pontos embaixo */
+  .depo {
+    grid-template-columns: 46px 1fr 46px;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+  }
+  .depo__viewport { grid-column: 2; grid-row: 1; padding-inline: var(--space-7); }
+  .depo__nav--prev { grid-column: 1; grid-row: 1; justify-self: center; }
+  .depo__nav--next { grid-column: 3; grid-row: 1; justify-self: center; }
+  .depo__dots { grid-column: 2; grid-row: 2; }
+}

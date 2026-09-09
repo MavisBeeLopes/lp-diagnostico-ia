@@ -190,3 +190,38 @@ as meta tags de Open Graph e Twitter no `index.html`.
 Nenhuma menção a prazo de entrega, a preço ou à DGS. Toda menção a IA deixa
 explícito que a revisão é feita por especialistas humanos — a IA nunca aparece
 revisando ou decidindo sozinha.
+
+## Depoimentos (seção 9)
+
+Carrossel com as respostas do último NPS da Lughy, um depoimento por vez, com nome,
+cargo e empresa. Sem biblioteca: `[hidden]` alterna os slides (esconde e tira do leitor
+de tela), setas, pontos e as setas do teclado navegam, autoplay de 7s que **para** no
+hover, no foco e com a aba em segundo plano.
+
+`fixarAltura()` trava a altura na do maior depoimento, senão a seção pula a cada troca.
+A guarda `if (!viewport.offsetWidth) return;` não é decorativa: se rodar com o elemento
+sem largura (aba oculta, ancestral `display:none`), o texto quebra em uma coluna de um
+caractere e grava uma altura absurda no style inline.
+
+### Curadoria: 6 dos 10 depoimentos
+
+A planilha tem 10 respostas. Quatro ficaram de fora:
+
+| quem | por quê |
+|---|---|
+| Thales (RANKEN) | elogia e depois critica: "ficaram algumas lacunas", falta de documentação |
+| Guilherme (Positiva Consultas) | cita "pontos de divergência em relação ao escopo" |
+| Renato (Gregtur) | condicional: "quando finalizado certamente deve ser um case" |
+| Diego Miguel (2ª resposta) | pessoa repetida; ficou a resposta mais forte |
+
+**As citações são verbatim**, com duas exceções documentadas:
+
+- **SYSTRA (Thalita)** — a resposta original tem ~700 caracteres e dominaria o
+  carrossel. Usei um recorte contíguo, sem emendar trechos distantes.
+- **Pedro Quintana** — normalizei pontuação e o acento de "parágrafo".
+
+⚠️ **Consentimento não verificado.** Responder a uma pesquisa de NPS não é autorização
+para publicar nome, cargo e empresa numa página de campanha. Confirmar com CS ou com o
+comercial antes de subir mídia.
+
+Os títulos da seção são copy nova, fora do `Copy_LP_Diagnostico_IA_Lughy.md`.

@@ -206,3 +206,100 @@
     if (el && !el.hidden) showError(name, false);
   });
 })();
+
+/* =========================================================
+   Depoimentos: carrossel
+   Um por vez. Avança sozinho, mas para assim que o visitante interage
+   (mouse, foco ou teclado) para não trocar no meio de uma leitura.
+   Slides inativos usam [hidden]: além de esconder, saem do leitor de tela.
+   ========================================================= */
+(function () {
+  "use strict";
+
+  var raiz = document.querySelector("[data-depo]");
+  if (!raiz) return;
+
+  var itens = Array.prototype.slice.call(raiz.querySelectorAll(".depo__item"));
+  if (itens.length < 2) return;
+
+  var viewport = raiz.querySelector(".depo__viewport");
+  var caixaPontos = raiz.querySelector("[data-depo-dots]");
+  var btnPrev = raiz.querySelector(".depo__nav--prev");
+  var btnNext = raiz.querySelector(".depo__nav--next");
+  var atual = 0;
+  var timer = null;
+  var INTERVALO = 7000;
+
+  var semAnimacao = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
+  /* Trava a altura na do maior depoimento. Sem isto a seção "pula" a cada
+     troca, porque as citações têm tamanhos bem diferentes entre si.
+
+     A guarda de largura não é decorativa: se isto rodar enquanto o elemento
+     está sem largura (aba oculta, ancestral display:none, painel recolhido),
+     o texto quebra em uma coluna de um caractere e a altura medida vira um
+     valor absurdo — que ficaria gravado no style inline. */
+  function fixarAltura() {
+    if (!viewport.offsetWidth) return;
+    var maior = 0;
+    itens.forEach(function (item) {
+      var estavaOculto = item.hidden;
+      item.hidden = false;
+      maior = Math.max(maior, item.offsetHeight);
+      item.hidden = estavaOculto;
+    });
+    if (maior) viewport.style.minHeight = maior + "px";
+  }
+
+  var pontos = itens.map(function (_, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "depo__dot";
+    b.setAttribute("aria-label", "Ver depoimento " + (i + 1) + " de " + itens.length);
+    b.addEventListener("click", function () { mostrar(i); parar(); });
+    caixaPontos.appendChild(b);
+    return b;
+  });
+
+  function mostrar(i) {
+    atual = (i + itens.length) % itens.length;
+    itens.forEach(function (item, k) { item.hidden = k !== atual; });
+    pontos.forEach(function (p, k) {
+      if (k === atual) p.setAttribute("aria-current", "true");
+      else p.removeAttribute("aria-current");
+    });
+  }
+
+  function comecar() {
+    if (semAnimacao || timer) return;
+    timer = window.setInterval(function () { mostrar(atual + 1); }, INTERVALO);
+  }
+
+  function parar() {
+    if (timer) { window.clearInterval(timer); timer = null; }
+  }
+
+  btnPrev.addEventListener("click", function () { mostrar(atual - 1); parar(); });
+  btnNext.addEventListener("click", function () { mostrar(atual + 1); parar(); });
+
+  raiz.addEventListener("mouseenter", parar);
+  raiz.addEventListener("mouseleave", comecar);
+  raiz.addEventListener("focusin", parar);
+
+  raiz.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") { mostrar(atual - 1); parar(); }
+    if (e.key === "ArrowRight") { mostrar(atual + 1); parar(); }
+  });
+
+  // aba em segundo plano não precisa girar
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) parar(); else comecar();
+  });
+
+  mostrar(0);
+  fixarAltura();
+  window.addEventListener("resize", fixarAltura);
+  comecar();
+})();
