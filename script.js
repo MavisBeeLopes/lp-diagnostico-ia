@@ -208,98 +208,139 @@
 })();
 
 /* =========================================================
-   Depoimentos: carrossel
-   Um por vez. Avança sozinho, mas para assim que o visitante interage
-   (mouse, foco ou teclado) para não trocar no meio de uma leitura.
-   Slides inativos usam [hidden]: além de esconder, saem do leitor de tela.
+   Carrossel genérico
+   Move tanto os depoimentos do NPS quanto os cases em vídeo. Cada raiz
+   declara [data-carrossel] e o seletor dos seus itens em [data-item].
+   Um item por vez; os inativos usam [hidden], que além de esconder também
+   os tira do leitor de tela.
    ========================================================= */
 (function () {
   "use strict";
-
-  var raiz = document.querySelector("[data-depo]");
-  if (!raiz) return;
-
-  var itens = Array.prototype.slice.call(raiz.querySelectorAll(".depo__item"));
-  if (itens.length < 2) return;
-
-  var viewport = raiz.querySelector(".depo__viewport");
-  var caixaPontos = raiz.querySelector("[data-depo-dots]");
-  var btnPrev = raiz.querySelector(".depo__nav--prev");
-  var btnNext = raiz.querySelector(".depo__nav--next");
-  var atual = 0;
-  var timer = null;
-  var INTERVALO = 7000;
 
   var semAnimacao = window.matchMedia
     ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
     : false;
 
-  /* Trava a altura na do maior depoimento. Sem isto a seção "pula" a cada
-     troca, porque as citações têm tamanhos bem diferentes entre si.
+  function criarCarrossel(raiz) {
+    var seletor = raiz.getAttribute("data-item");
+    var itens = Array.prototype.slice.call(raiz.querySelectorAll(seletor));
+    if (itens.length < 2) return null;
 
-     A guarda de largura não é decorativa: se isto rodar enquanto o elemento
-     está sem largura (aba oculta, ancestral display:none, painel recolhido),
-     o texto quebra em uma coluna de um caractere e a altura medida vira um
-     valor absurdo — que ficaria gravado no style inline. */
-  function fixarAltura() {
-    if (!viewport.offsetWidth) return;
-    var maior = 0;
-    itens.forEach(function (item) {
-      var estavaOculto = item.hidden;
-      item.hidden = false;
-      maior = Math.max(maior, item.offsetHeight);
-      item.hidden = estavaOculto;
+    var viewport = raiz.querySelector(".depo__viewport");
+    var caixaPontos = raiz.querySelector("[data-carrossel-dots]");
+    var btnPrev = raiz.querySelector(".depo__nav--prev");
+    var btnNext = raiz.querySelector(".depo__nav--next");
+    var atual = 0;
+    var timer = null;
+    var INTERVALO = 7000;
+    var travado = false; // vídeo aberto: não troca de slide sozinho
+
+    /* Trava a altura na do maior item, senão a coluna pula a cada troca.
+       A guarda de largura não é decorativa: rodando com o elemento sem
+       largura (aba oculta, ancestral display:none), o texto quebra em uma
+       coluna de um caractere e gravaria uma altura absurda no style. */
+    function fixarAltura() {
+      if (!viewport.offsetWidth) return;
+      var maior = 0;
+      itens.forEach(function (item) {
+        var estavaOculto = item.hidden;
+        item.hidden = false;
+        maior = Math.max(maior, item.offsetHeight);
+        item.hidden = estavaOculto;
+      });
+      if (maior) viewport.style.minHeight = maior + "px";
+    }
+
+    var pontos = itens.map(function (_, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "depo__dot";
+      b.setAttribute("aria-label", "Ver item " + (i + 1) + " de " + itens.length);
+      b.addEventListener("click", function () { mostrar(i); parar(); });
+      caixaPontos.appendChild(b);
+      return b;
     });
-    if (maior) viewport.style.minHeight = maior + "px";
-  }
 
-  var pontos = itens.map(function (_, i) {
-    var b = document.createElement("button");
-    b.type = "button";
-    b.className = "depo__dot";
-    b.setAttribute("aria-label", "Ver depoimento " + (i + 1) + " de " + itens.length);
-    b.addEventListener("click", function () { mostrar(i); parar(); });
-    caixaPontos.appendChild(b);
-    return b;
-  });
+    function mostrar(i) {
+      atual = (i + itens.length) % itens.length;
+      itens.forEach(function (item, k) { item.hidden = k !== atual; });
+      pontos.forEach(function (p, k) {
+        if (k === atual) p.setAttribute("aria-current", "true");
+        else p.removeAttribute("aria-current");
+      });
+    }
 
-  function mostrar(i) {
-    atual = (i + itens.length) % itens.length;
-    itens.forEach(function (item, k) { item.hidden = k !== atual; });
-    pontos.forEach(function (p, k) {
-      if (k === atual) p.setAttribute("aria-current", "true");
-      else p.removeAttribute("aria-current");
+    function comecar() {
+      if (semAnimacao || travado || timer) return;
+      timer = window.setInterval(function () { mostrar(atual + 1); }, INTERVALO);
+    }
+
+    function parar() {
+      if (timer) { window.clearInterval(timer); timer = null; }
+    }
+
+    btnPrev.addEventListener("click", function () { mostrar(atual - 1); parar(); });
+    btnNext.addEventListener("click", function () { mostrar(atual + 1); parar(); });
+
+    raiz.addEventListener("mouseenter", parar);
+    raiz.addEventListener("mouseleave", comecar);
+    raiz.addEventListener("focusin", parar);
+
+    raiz.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { mostrar(atual - 1); parar(); }
+      if (e.key === "ArrowRight") { mostrar(atual + 1); parar(); }
     });
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) parar(); else comecar();
+    });
+
+    mostrar(0);
+    fixarAltura();
+    window.addEventListener("resize", fixarAltura);
+    comecar();
+
+    return {
+      travar: function () { travado = true; parar(); },
+      remedir: fixarAltura
+    };
   }
 
-  function comecar() {
-    if (semAnimacao || timer) return;
-    timer = window.setInterval(function () { mostrar(atual + 1); }, INTERVALO);
-  }
-
-  function parar() {
-    if (timer) { window.clearInterval(timer); timer = null; }
-  }
-
-  btnPrev.addEventListener("click", function () { mostrar(atual - 1); parar(); });
-  btnNext.addEventListener("click", function () { mostrar(atual + 1); parar(); });
-
-  raiz.addEventListener("mouseenter", parar);
-  raiz.addEventListener("mouseleave", comecar);
-  raiz.addEventListener("focusin", parar);
-
-  raiz.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowLeft") { mostrar(atual - 1); parar(); }
-    if (e.key === "ArrowRight") { mostrar(atual + 1); parar(); }
+  var carrosseis = {};
+  document.querySelectorAll("[data-carrossel]").forEach(function (raiz) {
+    var api = criarCarrossel(raiz);
+    if (api) carrosseis[raiz.getAttribute("data-item")] = api;
   });
 
-  // aba em segundo plano não precisa girar
-  document.addEventListener("visibilitychange", function () {
-    if (document.hidden) parar(); else comecar();
-  });
+  /* -------- Cases em vídeo: fachada --------
+     Só a capa carrega junto com a página. O player do YouTube entra no DOM
+     no clique. São três vídeos: embutir os três iframes de saída custaria
+     alguns MB de terceiros e cookies antes de qualquer interesse do
+     visitante. Usa youtube-nocookie e para o giro automático quando abre,
+     para o vídeo não sumir no meio. */
+  document.querySelectorAll(".case__quadro").forEach(function (quadro) {
+    var botao = quadro.querySelector(".case__play");
+    if (!botao) return;
 
-  mostrar(0);
-  fixarAltura();
-  window.addEventListener("resize", fixarAltura);
-  comecar();
+    botao.addEventListener("click", function () {
+      var id = quadro.getAttribute("data-video");
+      if (!id) return;
+
+      var iframe = document.createElement("iframe");
+      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) +
+                   "?autoplay=1&rel=0&modestbranding=1";
+      iframe.title = botao.getAttribute("aria-label") || "Vídeo de case da Lughy";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      iframe.loading = "lazy";
+      iframe.className = "case__iframe";
+
+      quadro.innerHTML = "";
+      quadro.appendChild(iframe);
+      quadro.classList.add("is-tocando");
+
+      var api = carrosseis[".case"];
+      if (api) api.travar();
+    });
+  });
 })();

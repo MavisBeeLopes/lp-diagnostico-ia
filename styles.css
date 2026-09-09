@@ -1164,13 +1164,26 @@ button[type="submit"]:disabled { opacity: 0.7; cursor: progress; }
   margin-bottom: var(--space-7);
 }
 
+/* Duas colunas: depoimentos do NPS à esquerda, cases em vídeo à direita.
+   Empilham no mobile. */
+.vozes {
+  display: grid;
+  gap: var(--space-7);
+  align-items: start;
+}
+.vozes__label {
+  font-size: 0.85rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--laranja-texto);
+  margin-bottom: var(--space-4);
+}
+
 .depo {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr;
   gap: var(--space-5);
-  max-width: 900px;
-  margin-inline: auto;
 }
 
 .depo__viewport {
@@ -1276,15 +1289,68 @@ button[type="submit"]:disabled { opacity: 0.7; cursor: progress; }
 .depo__dots     { grid-column: 2; grid-row: 2; align-self: center; }
 .depo__nav--next { grid-column: 3; grid-row: 2; justify-self: end; }
 
-@media (min-width: 768px) {
-  /* setas nas laterais do card, pontos embaixo */
-  .depo {
-    grid-template-columns: 46px 1fr 46px;
-    align-items: center;
-    gap: var(--space-4) var(--space-5);
+/* =========================================================
+   Cases em vídeo (fachada: capa + play, o player entra no clique)
+   ========================================================= */
+.cases__viewport { padding: 0; overflow: hidden; }
+.cases__viewport .depo__track { height: 100%; }
+
+.case { margin: 0; }
+.case__quadro {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--cinza-100);
+  overflow: hidden;
+}
+.case__play {
+  display: block;
+  width: 100%; height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  position: relative;
+}
+.case__play img { width: 100%; height: 100%; object-fit: cover; }
+/* escurece a capa para o botão de play não competir com a imagem */
+.case__play::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(10, 10, 10, 0.22);
+  transition: background-color 0.25s ease;
+}
+.case__play:hover::after { background: rgba(10, 10, 10, 0.08); }
+.case__icone {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px; height: 62px;
+  border-radius: 50%;
+  background: var(--laranja-lughy);
+  color: var(--branco);
+  box-shadow: 0 12px 30px rgba(255, 90, 31, 0.45);
+  transition: transform 0.25s ease, background-color 0.2s ease;
+}
+.case__play:hover .case__icone {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: var(--laranja-lughy-dark);
+}
+.case__icone svg { width: 26px; height: 26px; margin-left: 3px; }
+.case__iframe { width: 100%; height: 100%; border: 0; display: block; }
+.case__titulo {
+  padding: var(--space-4) var(--space-5);
+  font-weight: var(--fw-bold);
+  color: var(--preto);
+  background: var(--branco);
+}
+
+@media (min-width: 1025px) {
+  .vozes {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
   }
-  .depo__viewport { grid-column: 2; grid-row: 1; padding-inline: var(--space-7); }
-  .depo__nav--prev { grid-column: 1; grid-row: 1; justify-self: center; }
-  .depo__nav--next { grid-column: 3; grid-row: 1; justify-self: center; }
-  .depo__dots { grid-column: 2; grid-row: 2; }
 }
