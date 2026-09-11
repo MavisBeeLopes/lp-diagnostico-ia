@@ -187,7 +187,12 @@ as meta tags de Open Graph e Twitter no `index.html`.
 
 ## Regras de marca aplicadas
 
-Nenhuma menção a prazo de entrega, a preço ou à DGS. Toda menção a IA deixa
+Nenhuma menção a prazo de entrega, a preço ou à DGS. **Nem a gratuidade**: a
+palavra "gratuito" foi retirada de toda a LP (botão, rótulo acima do formulário e
+meta description). A copy original a usava nos três pontos, seguindo o padrão das LPs
+anteriores, e o próprio arquivo de copy deixava "confirmar se o diagnóstico será 100%
+gratuito" como decisão em aberto. A decisão veio: não anunciar como gratuito.
+O apelo agora é "sem compromisso de contratação", que continua na página. Toda menção a IA deixa
 explícito que a revisão é feita por especialistas humanos — a IA nunca aparece
 revisando ou decidindo sozinha.
 
