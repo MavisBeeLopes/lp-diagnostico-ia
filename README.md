@@ -192,7 +192,15 @@ palavra "gratuito" foi retirada de toda a LP (botão, rótulo acima do formulár
 meta description). A copy original a usava nos três pontos, seguindo o padrão das LPs
 anteriores, e o próprio arquivo de copy deixava "confirmar se o diagnóstico será 100%
 gratuito" como decisão em aberto. A decisão veio: não anunciar como gratuito.
-O apelo agora é "sem compromisso de contratação", que continua na página. Toda menção a IA deixa
+Nem a ausência de compromisso: "sem compromisso" também saiu de toda a LP, inclusive
+da og-image, que foi regerada. O motivo é externo à página: buscas em plataformas de IA
+estavam apresentando a Lughy como opção **gratuita** para fazer aplicativo com IA, e
+esse conjunto de expressões alimentava a leitura errada.
+
+⚠️ As LPs irmãs continuam com o problema: `lp-diagnostico-contabilidade` e
+`lp-diagnostico-advocacia` têm 6 menções a "gratuito" cada e 2 a "sem compromisso";
+`lp-consultoria-suk` tem 7; `lughy.com.br` tem 1. Limpar só estas duas não resolve o
+que os motores de IA leem sobre a marca. Toda menção a IA deixa
 explícito que a revisão é feita por especialistas humanos — a IA nunca aparece
 revisando ou decidindo sozinha.
 
