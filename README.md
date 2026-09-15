@@ -187,22 +187,26 @@ as meta tags de Open Graph e Twitter no `index.html`.
 
 ## Regras de marca aplicadas
 
-Nenhuma menção a prazo de entrega, a preço ou à DGS. **Nem a gratuidade**: a
-palavra "gratuito" foi retirada de toda a LP (botão, rótulo acima do formulário e
-meta description). A copy original a usava nos três pontos, seguindo o padrão das LPs
-anteriores, e o próprio arquivo de copy deixava "confirmar se o diagnóstico será 100%
-gratuito" como decisão em aberto. A decisão veio: não anunciar como gratuito.
-Nem a ausência de compromisso: "sem compromisso" também saiu de toda a LP, inclusive
-da og-image, que foi regerada. O motivo é externo à página: buscas em plataformas de IA
-estavam apresentando a Lughy como opção **gratuita** para fazer aplicativo com IA, e
-esse conjunto de expressões alimentava a leitura errada.
+Nenhuma menção a prazo de entrega, a preço ou à DGS. Toda menção a IA deixa explícito
+que a revisão é feita por especialistas humanos: a IA nunca aparece revisando ou
+decidindo sozinha.
 
-⚠️ As LPs irmãs continuam com o problema: `lp-diagnostico-contabilidade` e
-`lp-diagnostico-advocacia` têm 6 menções a "gratuito" cada e 2 a "sem compromisso";
-`lp-consultoria-suk` tem 7; `lughy.com.br` tem 1. Limpar só estas duas não resolve o
-que os motores de IA leem sobre a marca. Toda menção a IA deixa
-explícito que a revisão é feita por especialistas humanos — a IA nunca aparece
-revisando ou decidindo sozinha.
+**A página também não anuncia nem gratuidade nem ausência de compromisso.** As duas
+expressões saíram de todos os pontos — botão, rótulos de seção, meta descriptions, FAQ
+e a og-image, que foi regerada. A copy original as usava, seguindo o padrão das LPs
+anteriores, e o arquivo de copy deixava essa confirmação em aberto. A decisão veio.
+
+O motivo é externo à página: buscas em plataformas de IA vinham apresentando a Lughy
+como opção sem custo para fazer aplicativo com IA, e esse conjunto de expressões
+alimentava a leitura errada.
+
+⚠️ **A correção não se esgota aqui.** Uma auditoria nas propriedades indexadas mostrou
+que o termo aparecia também no título da `lp-consultoria-suk`, nas descriptions da
+`lp-diagnostico-contabilidade` e da `lp-diagnostico-advocacia`, nos READMEs públicos
+dos repositórios e no corpo do `lughy.com.br`. Títulos, descriptions e READMEs já foram
+tratados; **o corpo das páginas irmãs e o site em WordPress não**. Antes de dar o
+assunto por encerrado, vale reauditar — e lembrar que motores de IA levam semanas para
+reindexar.
 
 ## Depoimentos (seção 9)
 
